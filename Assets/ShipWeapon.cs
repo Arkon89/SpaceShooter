@@ -16,7 +16,7 @@ public class ShipWeapon : MonoBehaviour
         
         for (int i = 0; i < 3; i++)
         {
-            _bulletPool.Add(Instantiate(_bulletPrefab));
+            _bulletPool.Add(Instantiate(_bulletPrefab, this.transform.position, Quaternion.identity));
             _bulletPool[i].SetActive(false);
         }        
     }

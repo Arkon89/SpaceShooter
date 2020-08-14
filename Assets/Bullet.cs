@@ -8,16 +8,17 @@ public class Bullet : MonoBehaviour
     [SerializeField] private int _speed;
     private Rigidbody _rigidbody;
     private Vector3 _basePosition; 
-    private float _damageCount;
+    [SerializeField]private int _damageCount = 1;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _basePosition = transform.position;
     }
 
     private void OnEnable() {
-        _rigidbody.AddForce(transform.forward * _speed);
+        if(!_rigidbody)
+            _rigidbody = GetComponent<Rigidbody>(); 
     }
 
     private void OnDisable() {
@@ -26,15 +27,19 @@ public class Bullet : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        _rigidbody.velocity = transform.forward * _speed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other) {
         if(other.TryGetComponent<Asteroid>(out Asteroid asteroid))
         {
-            asteroid.Hit(_damageCount);
+            if(other.TryGetComponent<Health>(out Health health))
+            {
+                health.Hit(_damageCount);
+            }
+            
             this.gameObject.SetActive(false);
         }
     }

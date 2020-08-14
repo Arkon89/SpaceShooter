@@ -2,26 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Asteroid : MonoBehaviour
 {
-    private float _health = 10f;
-    // Start is called before the first frame update
+    [SerializeField] private int _speed;
+    private Rigidbody _rigidbody;
+    private Vector3 _basePosition; 
     void Start()
     {
-        
+        _rigidbody = GetComponent<Rigidbody>();
+        _basePosition = transform.position;        
     }
 
-    // Update is called once per frame
-    public void Hit(float hitCount)
-    {
-        _health -= hitCount;
-        if(_health <= 0f)
-            DestroyAsteroid();
+    private void OnEnable() {
+        if(!_rigidbody)
+            _rigidbody = GetComponent<Rigidbody>();
+
+        if(TryGetComponent<Health>(out Health health))
+        {
+            health.ZeroHP.AddListener(DestroyAsteroid);
+        }     
     }
+
+    private void OnDisable() {
+        _rigidbody.velocity = Vector3.zero;
+        transform.position = _basePosition;
+    }
+
+    
 
     private void DestroyAsteroid()
     {
         Debug.Log("Desrtroy Asteroid");
+        this.gameObject.SetActive(false);
+    }
+
+
+    void FixedUpdate()
+    {
+        _rigidbody.velocity = -transform.forward * _speed * Time.deltaTime;        
+        
+        _rigidbody.rotation *= Quaternion.Euler(transform.forward * _speed * Time.deltaTime);
+        
     }
 
 
