@@ -1,20 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 public class AsteroidSpawner : MonoBehaviour
 {
     
+    [SerializeField] private LevelState[] _levelStates;
     [SerializeField] private float _delayTime;
-    [SerializeField] private int _asteroidCount; //count to win
+    [SerializeField] private int _asteroidCountToWin;
+    [SerializeField] private int _asteroidCurrentCollectedCount; 
     [SerializeField] private int _asteroidsOnScreenMaxCount;
     [SerializeField] private GameObject _asteroidPrefab;
 
     private List<GameObject> _asteroidsOnBase = new List<GameObject>();
     private List<GameObject> _asteroidsOnScreen = new List<GameObject>();
+
+    public UnityEvent LevelComplete = new UnityEvent();
     
     private void Start()
     {
+        SetLevelState();
         
         for (int i = 0; i < _asteroidsOnScreenMaxCount; i++)
         {
@@ -23,6 +28,21 @@ public class AsteroidSpawner : MonoBehaviour
         }
 
         StartCoroutine(Spawner());
+    }
+
+    private void SetLevelState()
+    {
+        GameState gameState = Resources.Load<GameState>("SO_Instances/Game");
+        int lastCompletedLevel = gameState.lastLevel;
+
+        if(lastCompletedLevel >= _levelStates.Length)
+            lastCompletedLevel -= 1;  // КОСТЫЛЬ
+
+        _delayTime = _levelStates[lastCompletedLevel].delayTime;
+        _asteroidsOnScreenMaxCount = _levelStates[lastCompletedLevel].asteroidsOnScreenMaxCount;
+        _asteroidCountToWin = _levelStates[lastCompletedLevel].asteroidCountToWin;
+
+        
     }
 
     
@@ -49,7 +69,7 @@ public class AsteroidSpawner : MonoBehaviour
                 if(nextAsteroid.TryGetComponent<Asteroid>(out Asteroid asteroid))
                 {
                     asteroid.OutOfScreen.AddListener(ReturnToBase);
-                }
+                }                
             } 
             yield return new WaitForSeconds(_delayTime);
         }        
@@ -63,6 +83,11 @@ public class AsteroidSpawner : MonoBehaviour
         if(asteroid.activeSelf)
             asteroid.SetActive(false);
 
+        _asteroidCurrentCollectedCount ++;
+        if(_asteroidCurrentCollectedCount >= _asteroidCountToWin)
+        {
+            LevelComplete.Invoke();
+        }
         
         
     }

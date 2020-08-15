@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class Asteroid : MoveForward
+public class LoosePanel : GameOwerPanel
 {
-
-
+    
 }
