@@ -12,7 +12,7 @@ public class Mediator : MonoBehaviour
         {
             health.ZeroHP.AddListener(OnPlayerDied);
         }
-        FindObjectOfType<AsteroidSpawner>().LevelComplete.AddListener(OnLevelComplete);
+        FindObjectOfType<TaskPanel>().LevelComplete.AddListener(OnLevelComplete);
         _gameOwerPanel = FindObjectOfType<LoosePanel>().gameObject;
         _gameOwerPanel.SetActive(false);
         _levelCompletePanel = FindObjectOfType<LevelCompletePanel>().gameObject;

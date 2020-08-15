@@ -30,6 +30,7 @@ public class ShipMover : MonoBehaviour
     {
         Vector3 directon = new Vector3(_horizontal, 0f,_vertical);
         Move(directon);
+        Rotate();
     }
 
     private void Move(Vector3 directon)
@@ -43,6 +44,12 @@ public class ShipMover : MonoBehaviour
             _rigidbody.velocity = (Vector3.zero - transform.position) * Time.deltaTime;
         } 
         
+    }
+
+    private void Rotate()
+    {
+        Quaternion rotation = Quaternion.AngleAxis(-30f * _horizontal, transform.forward);
+        _rigidbody.rotation = Quaternion.Lerp(_rigidbody.rotation, rotation, _speed*Time.deltaTime);
     }  
 
     

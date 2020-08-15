@@ -6,16 +6,16 @@ public class AsteroidSpawner : MonoBehaviour
 {
     
     [SerializeField] private LevelState[] _levelStates;
-    [SerializeField] private float _delayTime;
-    [SerializeField] private int _asteroidCountToWin;
-    [SerializeField] private int _asteroidCurrentCollectedCount; 
-    [SerializeField] private int _asteroidsOnScreenMaxCount;
+    private float _delayTime;
+    private int _asteroidCountToWin;
+    private int _asteroidCurrentCollectedCount; 
+    private int _asteroidsOnScreenMaxCount;
     [SerializeField] private GameObject _asteroidPrefab;
 
     private List<GameObject> _asteroidsOnBase = new List<GameObject>();
     private List<GameObject> _asteroidsOnScreen = new List<GameObject>();
 
-    public UnityEvent LevelComplete = new UnityEvent();
+    
     
     private void Start()
     {
@@ -36,7 +36,10 @@ public class AsteroidSpawner : MonoBehaviour
         int lastCompletedLevel = gameState.lastLevel;
 
         if(lastCompletedLevel >= _levelStates.Length)
-            lastCompletedLevel -= 1;  // КОСТЫЛЬ
+            {
+                lastCompletedLevel = 0;  // КОСТЫЛЬ
+                gameState.lastLevel = lastCompletedLevel; // КОСТЫЛЬ
+            }
 
         _delayTime = _levelStates[lastCompletedLevel].delayTime;
         _asteroidsOnScreenMaxCount = _levelStates[lastCompletedLevel].asteroidsOnScreenMaxCount;
@@ -84,11 +87,7 @@ public class AsteroidSpawner : MonoBehaviour
         if(asteroid.activeSelf)
             asteroid.SetActive(false);
 
-        _asteroidCurrentCollectedCount ++;
-        if(_asteroidCurrentCollectedCount >= _asteroidCountToWin)
-        {
-            LevelComplete.Invoke();
-        }
+        
     }
 
     public int GetAsteroidTask()
