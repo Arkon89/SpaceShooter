@@ -168,5 +168,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cb1225542ee4a84cb68dc7f74603fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 100
+  _speed: 300
+  OutOfScreen:
+    m_PersistentCalls:
+      m_Calls: []
   _damageCount: 1
+  bulletDisabled:
+    m_PersistentCalls:
+      m_Calls: []
