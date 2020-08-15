@@ -16,6 +16,14 @@ public class Bullet : MoveForward
         _basePosition = transform.position;
     }
 
+    protected override void OnEnable() {
+        base.OnEnable();
+        if(TryGetComponent<AudioSource>(out AudioSource audioSource))
+        {
+            audioSource.Play();
+        }
+    }
+
 
     private void OnDisable() {
         _rigidbody.velocity = Vector3.zero;

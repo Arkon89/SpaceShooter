@@ -8,6 +8,7 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private GameObject _lifePrefab;
     [SerializeField] private List<GameObject> _lifes;
     
+    
 
     private void Start() {
         if(FindObjectOfType<ShipMover>().gameObject.TryGetComponent<Health>(out Health health))

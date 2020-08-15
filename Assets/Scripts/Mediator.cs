@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Mediator : MonoBehaviour
 {
-    GameObject _gameOwerPanel, _levelCompletePanel;
-    void Start()
+    [SerializeField] private GameObject _hudCanvas;
+    private GameObject _gameOwerPanel, _levelCompletePanel;
+    private void Start()
     {
         if(FindObjectOfType<ShipMover>().TryGetComponent<Health>(out Health health))
         {
@@ -22,8 +23,10 @@ public class Mediator : MonoBehaviour
 
     private void OnPlayerDied(GameObject died)
     {
+        _hudCanvas.SetActive(false);
         _gameOwerPanel.SetActive(true);
         _levelCompletePanel.SetActive(false);
+
         FindObjectOfType<ShipMover>().gameObject.SetActive(false);
     }
 
@@ -33,6 +36,7 @@ public class Mediator : MonoBehaviour
         gameState.lastLevel += 1; 
         FindObjectOfType<AsteroidSpawner>().gameObject.SetActive(false);
         FindObjectOfType<ShipMover>().gameObject.SetActive(false);
+        _hudCanvas.SetActive(false);
         _levelCompletePanel.SetActive(true);
         _gameOwerPanel.SetActive(false);
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CollisionHandler : MonoBehaviour
 {
+    [SerializeField] private AudioClip _playerRespawnSound;
     private void OnTriggerStay(Collider other) {
         if(other.TryGetComponent<Asteroid>(out Asteroid asteroid))
         {
@@ -18,6 +19,10 @@ public class CollisionHandler : MonoBehaviour
                 myHealth.Hit(1);
             }
             transform.position = Vector3.zero;
+            if(TryGetComponent<AudioSource>(out AudioSource audioSource))
+            {
+                audioSource.PlayOneShot(_playerRespawnSound);
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ public class MoveForward : MonoBehaviour
     protected Rigidbody _rigidbody;
     public UnityEventGameObject OutOfScreen = new UnityEventGameObject();
     
-    private void OnEnable() {
+    protected virtual void OnEnable() {
         if(!_rigidbody)
             _rigidbody = GetComponent<Rigidbody>();
         _screenSize = FindObjectOfType<ScreenSyze>();             

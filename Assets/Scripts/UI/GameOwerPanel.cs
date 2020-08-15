@@ -12,6 +12,13 @@ public abstract class GameOwerPanel : MonoBehaviour
     private void Start() {
         _buttons = GetComponentsInChildren<Button>();
     }
+
+    private void OnEnable() {
+        if(TryGetComponent<AudioSource>(out AudioSource audioSource))
+        {
+            audioSource.Play();
+        }
+    }
     
     public void RestartLevel()
     {

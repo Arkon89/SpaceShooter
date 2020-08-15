@@ -42,7 +42,7 @@ public class AsteroidSpawner : MonoBehaviour
         _asteroidsOnScreenMaxCount = _levelStates[lastCompletedLevel].asteroidsOnScreenMaxCount;
         _asteroidCountToWin = _levelStates[lastCompletedLevel].asteroidCountToWin;
 
-        
+        FindObjectOfType<TaskPanel>().SetAsteroidTask(_asteroidCountToWin);        
     }
 
     
@@ -65,6 +65,7 @@ public class AsteroidSpawner : MonoBehaviour
                 if(nextAsteroid.TryGetComponent<Health>(out Health health))
                 {
                     health.ZeroHP.AddListener(ReturnToBase);
+                    health.ZeroHP.AddListener(FindObjectOfType<TaskPanel>().OnAsteroidDied);
                 }
                 if(nextAsteroid.TryGetComponent<Asteroid>(out Asteroid asteroid))
                 {
@@ -88,7 +89,10 @@ public class AsteroidSpawner : MonoBehaviour
         {
             LevelComplete.Invoke();
         }
-        
-        
+    }
+
+    public int GetAsteroidTask()
+    {
+        return _asteroidCountToWin; 
     }
 }
